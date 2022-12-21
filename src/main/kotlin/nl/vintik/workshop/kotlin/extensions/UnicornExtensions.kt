@@ -7,7 +7,7 @@ fun Unicorn.toMalicorn(): Unicorn = this.apply {
     type = UnicornType.MALICORN
 }
 
-fun Unicorn.computePower(): Int? = if (magic != null && size != null) magic * size else null // TODO better way?
+fun Unicorn.computePower(): Int? = magic?.let { magic -> size?.let { size -> size * magic } } // TODO still must be better way
 
 fun List<Unicorn>.filterByType(vararg unicornType: UnicornType): List<Unicorn> = this.filter { it.type in unicornType }
 
