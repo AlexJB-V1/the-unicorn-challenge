@@ -4,13 +4,21 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import nl.vintik.workshop.kotlin.basics.Unicorn
+import nl.vintik.workshop.kotlin.basics.UnicornHouse
+import nl.vintik.workshop.kotlin.basics.UnicornType
+import java.util.*
 import kotlin.random.Random
 
-// TODO: Check out what zip does
-// TODO: Debug to see coroutines working
-// TODO: What is unusual in the restaurant?
-// TODO: Fill unicorn house with unicorns
-// TODO: Let unicorns eat Christmas dinner, display name of unicorn for each println within coroutine scope
+val unicorns = listOf(
+    Unicorn(
+        UUID.randomUUID(), "Bob", UnicornType.MALICORN, 20, 10, "Bad unicorn"
+    ), Unicorn(
+        UUID.randomUUID(), "Jane", UnicornType.UNICORN, 10, 30, "Euro unicorn"
+    ), Unicorn(
+        UUID.randomUUID(), "John", UnicornType.DEMICORN, null, null, null
+    )
+)
 
 val plates = listOf(
     "Stuffed Turkey",
@@ -25,24 +33,30 @@ fun main() {
         eatChristmasDinner()
     }
 }
-
 suspend fun eatChristmasDinner() {
     coroutineScope {
-        plates.forEach { plate ->
-            println("The Unicorn came in!")
-            launch {
-                serveAndEat(plate)
+
+    val unicornHouse = UnicornHouse()
+        unicornHouse.bulkEnter(*unicorns.toTypedArray())
+        unicorns.forEach {
+            println("${it.name} is sitting down to eat")
+            delay(Random.nextLong(100, 3000))
+            println("${it.name} is waiting for food")
+            delay(Random.nextLong(100, 3000))
+            plates.forEach { plate ->
+                launch {
+                    serveAndEat(it, plate)
+                }
             }
         }
     }
     println("Is everyone done?")
 }
 
-suspend fun serveAndEat(plate: Pair<String, String>) {
-    println("Waiting for food")
+suspend fun serveAndEat(unicorn: Unicorn, plate: Pair<String, String>) {
     val (dish, size) = plate
     delay(Random.nextLong(100, 3000))
-    println("I got my food, let me start eating this: $dish that's $size cm")
+    println("[${unicorn.name}] got my food, let me start eating this: $dish that's $size cm")
     delay(Random.nextLong(100, 3000))
-    println("I'm done eating: $dish that's $size cm")
+    println("[${unicorn.name}] done eating: $dish that's $size cm")
 }

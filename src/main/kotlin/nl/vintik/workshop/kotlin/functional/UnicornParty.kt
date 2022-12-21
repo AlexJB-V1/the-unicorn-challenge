@@ -4,11 +4,11 @@ import nl.vintik.workshop.kotlin.basics.Unicorn
 import nl.vintik.workshop.kotlin.basics.UnicornHouse
 import nl.vintik.workshop.kotlin.basics.UnicornType
 import nl.vintik.workshop.kotlin.extensions.filterByType
+import javax.script.Invocable
 
 
 fun UnicornHouse.partyHardy(): List<String> {
-    //function composition with infix
-    val faceControl = TODO("Allow only big and bad unicorns to the party")
+    val faceControl = ::onlyBig and ::onlyBad
     return party(faceControl)
 }
 
@@ -21,7 +21,7 @@ private fun UnicornHouse.party(faceControl: (List<Unicorn>) -> List<Unicorn>) =
     faceControl.invoke(this.unicorns).map { it.name }
 
 
-private fun onlyBig(unicorns: List<Unicorn>): List<Unicorn> = TODO("Filter given unicorns by size starting from 10 inclusive")
+private fun onlyBig(unicorns: List<Unicorn>): List<Unicorn> = unicorns.filter { compareValues(it.size, 10) > 0}
 
 private fun onlyGood(unicorns: List<Unicorn>) = unicorns.filterByType(UnicornType.UNICORN, UnicornType.DEMICORN)
 

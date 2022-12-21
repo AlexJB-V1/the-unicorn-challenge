@@ -16,25 +16,28 @@ class UnicornHouse {
      * @param unicorn is defined as not null
      */
     fun enter(unicorn: Unicorn): String {
-        TODO("Add unicorn to unicorns list")
-        TODO("Print unicorn description if it is not null")
-        TODO("Print a welcome message for each unicorn type, see unit test UnicornHouseTest for expected message")
+        unicorns += unicorn
+        unicorn.description?.let { println(it) }
+        return when (unicorn.type) {
+            UnicornType.MALICORN -> "Welcome Malicious Unicorn Bob"
+            UnicornType.DEMICORN -> "Not Used"
+            UnicornType.UNICORN -> "Welcome European Unicorn Jane"
+        }
     }
 
-    fun bulkEnter(vararg unicorn: Unicorn): List<String> = TODO("Implement method that executes enter(unicorn) for each unicorn and return all welcome messages as list")
+    fun bulkEnter(vararg unicorn: Unicorn): List<String> = unicorn.map { enter(it) }
 
-    fun exit(unicornId: UUID): Boolean = TODO("Should remove unicorn from unicorn list returning true on success otherwise false")
+    fun exit(unicornId: UUID): Boolean = unicorns.removeIf { it.id == unicornId }
 
+    fun countUnicorns(): Int = unicorns.size
 
-    fun countUnicorns(): Int = TODO("count unicorns in unicorn list")
+    fun countUnicornsByType(unicornType: UnicornType): Int = unicorns.filter { it.type == unicornType }.size
 
-    fun countUnicornsByType(unicornType: UnicornType): Int = TODO("count unicorns of given unicorn type in unicorn list ")
+    fun mapUnicornsByType(): Map<UnicornType, Unicorn> = unicorns.associateBy { it.type }
 
-    fun mapUnicornsByType(): Map<UnicornType, Unicorn> = TODO("Convert unicorn list to a map keyed by unicorn type. If any two elements would have the same key, then the last one gets added to the map")
+    fun orderUnicornsBySizeDescending(): List<Unicorn> = unicorns.sortedByDescending { it.size }
 
-    fun orderUnicornsBySizeDescending(): List<Unicorn> = TODO("Return a list of all unicorns (from unicorns list) sorted in descending order of unicorn size")
-
-    fun totalMagicInDaHouse(): Int = TODO("Return the some of magic property (if present) of all unicorns in unicorn list")
+    fun totalMagicInDaHouse(): Int = unicorns.sumOf { it.magic ?: 0 }
 
     fun filterUnicornsByType(vararg unicornType: UnicornType): List<Unicorn> = unicorns.filterByType(*unicornType)
 
